@@ -1,5 +1,7 @@
 #include <vector>
 #include <iostream>
+#include <string>
+#include <stdlib.h>
 using namespace std;
 
 template <typename K, typename V>
@@ -62,6 +64,33 @@ private:
     void inserir(Chave c, Valor v, Tupla<Chave, Valor> **tabela)
     {
         // IMPLEMENTAR
+        hash<string> str_hash;
+
+        int int_hash = str_hash(c);
+
+        int abs_hash = abs(int_hash);
+
+        int indice = abs_hash % qtde_buckets;
+
+        if (tabela[indice] == 0)
+        {
+            tabela[indice] = Tupla(c, v);
+        }
+        else
+        {
+            Tupla aux = tabela[indice];
+
+            while (aux.prox != 0)
+            {
+                aux = aux.prox;
+            }
+            aux.prox = Tupla(c, v);
+
+            // se proximo for 0, setProx(Tupla)
+            // se proximo for != 0,
+        }
+
+        tamanho++;
     }
 
     /**
@@ -75,6 +104,8 @@ private:
      **/
     void aumentaArray()
     {
+        qtde_buckets *= 8;
+
         // IMPLEMENTAR
     }
 
@@ -87,6 +118,18 @@ public:
     TabelaHash()
     {
         // IMPLEMENTAR
+
+        int capacidade;
+        if (qtde_buckets == 0)
+        {
+            capacidade = 8;
+        }
+        else
+        {
+            capacidade = qtde_buckets;
+        }
+
+        tabela = (Tupla<Chave, Valor> **)calloc(capacidade, sizeof(Tupla<Chave, Valor>));
     }
 
     /**
@@ -101,6 +144,12 @@ public:
     void inserir(Chave c, Valor v)
     {
         // IMPLEMENTAR
+        double lf = load_factor();
+        if (lf >= 1)
+        {
+            aumentaArray();
+        }
+        TabelaHash::inserir(c, v, tabela);
     }
 
     /**
@@ -109,6 +158,7 @@ public:
     double load_factor()
     {
         // IMPLEMENTAR
+        return (double)tamanho / (double)qtde_buckets;
     }
 
     /**
@@ -134,6 +184,7 @@ public:
     bool contemChave(Chave chave)
     {
         // IMPLEMENTAR
+        return true;
     }
 
     /**
@@ -152,6 +203,8 @@ public:
     void clear()
     {
         // IMPLEMENTAR
+        free(tabela);
+        // TabelaHash::TabelaHash();
     }
 
     /**

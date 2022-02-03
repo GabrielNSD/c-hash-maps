@@ -1,5 +1,14 @@
 #include <iostream>
+#include <string>
 
-void say_hello(){
-    std::cout << "Hello, from c-maps!\n";
+using namespace std;
+
+int main()
+{
+    cout << "AAAAAAAAAAA" << endl;
+    string oi;
+    oi = "oi";
+    hash<string> str_hash;
+    cout << str_hash(oi);
+    return 0;
 }

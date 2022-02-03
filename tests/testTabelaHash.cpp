@@ -1,7 +1,7 @@
 //#include "pch.h"
 //#include "../src/tabelas-hash/TabelaHash.h"
 #include <gtest/gtest.h>
-#include "../TabelaHashExercicio.hpp"
+#include "../src/TabelaHashExercicio.hpp"
 #include <algorithm>
 using namespace std;
 
@@ -40,7 +40,7 @@ TEST_F(TabelaHashTest, AdicionarEmTabelaVazia)
     EXPECT_EQ(estoqueSupermercadoTabelaHash.size(), 5);
     EXPECT_EQ(estoqueSupermercadoTabelaHash.bucket_count(), 8);
 }
-
+/*
 TEST_F(TabelaHashTest, ForcarAumentoDeTabela)
 {
     int qtdadeRepeticoes = 2;
@@ -159,4 +159,10 @@ TEST_F(TabelaHashTest, RemoverTodasAsTuplasEmTabelaGrande)
         }
     }
     EXPECT_EQ(estoqueSupermercadoTabelaHash.size(), 0);
+} */
+
+int main(int argc, char **argv)
+{
+    testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
