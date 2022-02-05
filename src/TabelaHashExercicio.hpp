@@ -53,6 +53,19 @@ private:
     // qtdade de elementos já inseridos na tabela hash
     int tamanho;
 
+    int hashIndex(Chave c)
+    {
+        hash<string> str_hash;
+
+        int int_hash = str_hash(c);
+
+        int abs_hash = abs(int_hash);
+
+        int indice = abs_hash % qtde_buckets;
+
+        return indice;
+    }
+
     /**
      * Função para inserir a tupla <c,v> na tabela.
      * É preciso calcular o código hash a partir da chave c.
@@ -64,27 +77,26 @@ private:
     void inserir(Chave c, Valor v, Tupla<Chave, Valor> **tabela)
     {
         // IMPLEMENTAR
-        hash<string> str_hash;
 
-        int int_hash = str_hash(c);
+        int indice = hashIndex(c);
 
-        int abs_hash = abs(int_hash);
-
-        int indice = abs_hash % qtde_buckets;
-
-        if (tabela[indice] == 0)
+        if (tabela[indice] == NULL)
         {
-            tabela[indice] = Tupla(c, v);
+            Tupla<Chave, Valor> *tupla = new Tupla(c, v);
+            tabela[indice] = tupla;
         }
         else
         {
-            Tupla aux = tabela[indice];
+            Chave chave = tabela[indice]->getChave();
+            Valor valor = tabela[indice]->getValor();
+            Tupla<Chave, Valor> *aux = new Tupla<Chave, Valor>(chave, valor);
+            aux->setProx(tabela[indice]->getProx());
 
-            while (aux.prox != 0)
+            while (aux->getProx() != 0)
             {
-                aux = aux.prox;
+                aux = aux->getProx();
             }
-            aux.prox = Tupla(c, v);
+            aux->setProx(new Tupla(c, v));
 
             // se proximo for 0, setProx(Tupla)
             // se proximo for != 0,
@@ -104,7 +116,39 @@ private:
      **/
     void aumentaArray()
     {
+        int old_qtde_buckets = qtde_buckets;
         qtde_buckets *= 8;
+
+        /* TabelaHash<string, int> tabelaAntiga = new TabelaHash<string, int>;
+        tabelaAntiga->tabela = tabela;
+        tabelaAntiga->qtde_buckets = old_qtde_buckets; */
+
+        TabelaHash<string, int> tabelaAntiga;
+        tabelaAntiga.tabela = tabela;
+        tabelaAntiga.qtde_buckets = old_qtde_buckets;
+
+        /* clear();
+        qtde_buckets = old_qtde_buckets * 8; */
+        // TabelaHash();
+        tabela = (Tupla<Chave, Valor> **)calloc(qtde_buckets, sizeof(Tupla<Chave, Valor>));
+        tamanho = 0;
+
+        for (int i = 0; i < old_qtde_buckets; i++)
+        {
+            if (tabelaAntiga.tabela[i] != NULL)
+            {
+                Tupla<Chave, Valor> *aux = new Tupla<Chave, Valor>(tabelaAntiga.tabela[i]->getChave(), tabelaAntiga.tabela[i]->getValor());
+                aux->setProx(tabelaAntiga.tabela[i]->getProx());
+                Chave old_chave = tabelaAntiga.tabela[i]->getChave();
+                inserir(old_chave, tabelaAntiga.tabela[i]->getValor());
+
+                while (aux->getProx() != NULL)
+                {
+                    aux = aux->getProx();
+                    inserir(aux->getChave(), aux->getValor());
+                }
+            }
+        }
 
         // IMPLEMENTAR
     }
@@ -123,6 +167,7 @@ public:
         if (qtde_buckets == 0)
         {
             capacidade = 8;
+            qtde_buckets = 8;
         }
         else
         {
@@ -184,7 +229,34 @@ public:
     bool contemChave(Chave chave)
     {
         // IMPLEMENTAR
-        return true;
+
+        int indice = hashIndex(chave);
+
+        if (tabela[indice] != NULL)
+        {
+            if (tabela[indice]->getProx() == NULL)
+            {
+                return true;
+            }
+            else
+            {
+                if ((tabela[indice]->getChave()).compare(chave) != 0)
+                {
+                    return true;
+                }
+                Tupla<Chave, Valor> *aux = new Tupla<Chave, Valor>(tabela[indice]->getChave(), tabela[indice]->getValor());
+                aux->setProx(tabela[indice]->getProx());
+                while (aux->getProx() != NULL)
+                {
+                    if ((aux->getChave()).compare(chave) != 0)
+                    {
+                        return true;
+                    }
+                    aux->setProx(aux->getProx());
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -204,7 +276,9 @@ public:
     {
         // IMPLEMENTAR
         free(tabela);
-        // TabelaHash::TabelaHash();
+        qtde_buckets = 0;
+        tamanho = 0;
+        // TabelaHash();
     }
 
     /**

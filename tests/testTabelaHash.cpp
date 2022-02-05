@@ -40,7 +40,7 @@ TEST_F(TabelaHashTest, AdicionarEmTabelaVazia)
     EXPECT_EQ(estoqueSupermercadoTabelaHash.size(), 5);
     EXPECT_EQ(estoqueSupermercadoTabelaHash.bucket_count(), 8);
 }
-/*
+
 TEST_F(TabelaHashTest, ForcarAumentoDeTabela)
 {
     int qtdadeRepeticoes = 2;
@@ -57,7 +57,7 @@ TEST_F(TabelaHashTest, ForcarAumentoDeTabela)
     // ele multiplica por 8
     EXPECT_EQ(estoqueSupermercadoTabelaHash.bucket_count(), 64);
 }
-
+/*
 TEST_F(TabelaHashTest, ForcarAumentoDeTabelaMultiplasVezes)
 {
     int qtdadeRepeticoes = 1000;
