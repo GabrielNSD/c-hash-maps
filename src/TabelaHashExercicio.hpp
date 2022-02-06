@@ -53,6 +53,12 @@ private:
     // qtdade de elementos já inseridos na tabela hash
     int tamanho;
 
+    /**
+     * @brief Função para calcular o índice de acordo com o hash da chave
+     *
+     * @param c
+     * @return int
+     */
     int hashIndex(Chave c)
     {
         hash<string> str_hash;
