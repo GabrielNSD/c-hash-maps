@@ -57,7 +57,7 @@ TEST_F(TabelaHashTest, ForcarAumentoDeTabela)
     // ele multiplica por 8
     EXPECT_EQ(estoqueSupermercadoTabelaHash.bucket_count(), 64);
 }
-/*
+
 TEST_F(TabelaHashTest, ForcarAumentoDeTabelaMultiplasVezes)
 {
     int qtdadeRepeticoes = 1000;
@@ -159,7 +159,7 @@ TEST_F(TabelaHashTest, RemoverTodasAsTuplasEmTabelaGrande)
         }
     }
     EXPECT_EQ(estoqueSupermercadoTabelaHash.size(), 0);
-} */
+}
 
 int main(int argc, char **argv)
 {
